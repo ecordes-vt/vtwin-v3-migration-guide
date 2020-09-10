@@ -65,7 +65,7 @@ Transcription engineId(s):
  Here is an example single engine job:
  
  ```
- mutation microsoftTranscription{
+ mutation speechmaticsTranscription{
   launchSingleEngineJob(input: {
     uploadUrl: "
     engineId: "c0e55cde-340b-44d7-bb42-2e0d65e98255" # english transcription
