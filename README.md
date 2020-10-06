@@ -82,7 +82,7 @@ mutation createCognitionJob {
         }
         {
           engineId: "ENGINE_ID"
-          payload: {}
+          payload: { keywords: "KEYWORD1,KEYWORD2,,,KEYWORD100"}
           ioFolders: [
             { referenceId: "engineInputFolder", mode: chunk, type: input }
             { referenceId: "engineOutputFolder", mode: chunk, type: output }
@@ -199,6 +199,7 @@ mutation createCombinationJob {
         }
         { # speechmatics transcription
           engineId: "c0e55cde-340b-44d7-bb42-2e0d65e98255"
+          payload: { keywords: "KEYWORD1,KEYWORD2,,,KEYWORD100"}
           ioFolders: [
             { referenceId: "engineInputFolder1", mode: chunk, type: input }
             { referenceId: "engineOutputFolder1", mode: chunk, type: output }
