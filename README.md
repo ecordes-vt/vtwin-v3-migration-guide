@@ -9,6 +9,8 @@ Sections:
   
   - [speaker separation job](#speaker-separation)
   
+  - [ combination job ](#combination-job)
+  
 [checking job status](#checking-job-status)
 
 [retrieving job output](#retrieving-job-output)
@@ -171,6 +173,86 @@ mutation createCognitionJob {
       ]
     }){
       id
+}}
+```
+
+# Combination Job
+
+```
+mutation createCombinationJob {
+    createJob(input: {
+      target: { status: "downloaded" }
+      clusterId :"rt-1cdc1d6d-a500-467a-bc46-d3c5bf3d6901"
+      tasks: [
+        {
+          engineId: "8bdb0e3b-ff28-4f6e-a3ba-887bd06e6440"
+          payload:{
+            ffmpegTemplate: "audio",
+            url: "MEDIA_FILE_LINK"
+            customFFMPEGProperties: { chunkSizeInSeconds: "300" }
+          }
+          ioFolders: [
+            { referenceId: "siInputFolder", mode: stream, type: input }
+            { referenceId: "siOutputFolder", mode: chunk, type: output }
+          ]
+          executionPreferences: { parentCompleteBeforeStarting: true, priority:-10 }
+        }
+        { # speechmatics transcription
+          engineId: "c0e55cde-340b-44d7-bb42-2e0d65e98255"
+          ioFolders: [
+            { referenceId: "engineInputFolder1", mode: chunk, type: input }
+            { referenceId: "engineOutputFolder1", mode: chunk, type: output }
+          ]
+          executionPreferences: { parentCompleteBeforeStarting: true, priority:-10 }
+        }
+        { # speaker separation
+          engineId: "06c3f1d7-7424-407b-a3b5-6ef61154fc0b"
+          ioFolders: [
+            { referenceId: "engineInputFolder2", mode: chunk, type: input }
+            { referenceId: "engineOutputFolder2", mode: chunk, type: output }
+          ]
+          executionPreferences: { parentCompleteBeforeStarting: true, priority:-10 }
+        }
+        {
+          engineId: "8eccf9cc-6b6d-4d7d-8cb3-7ebf4950c5f3"
+          executionPreferences: { parentCompleteBeforeStarting: true, priority:-10 }
+          ioFolders: [
+            { referenceId: "owInputFolder1", mode: chunk, type: input }
+          ]
+        }
+        {
+          engineId: "8eccf9cc-6b6d-4d7d-8cb3-7ebf4950c5f3"
+          executionPreferences: { parentCompleteBeforeStarting: true, priority:-10 }
+          ioFolders: [
+            { referenceId: "owInputFolder2", mode: chunk, type: input }
+          ]
+        }
+      ]
+      routes: [
+        { 
+          parentIoFolderReferenceId: "siOutputFolder"
+          childIoFolderReferenceId: "engineInputFolder1"
+          options: {}
+        }
+        { 
+          parentIoFolderReferenceId: "siOutputFolder"
+          childIoFolderReferenceId: "engineInputFolder2"
+          options: {}
+        }
+        { 
+          parentIoFolderReferenceId: "engineOutputFolder1"
+          childIoFolderReferenceId: "owInputFolder1"
+          options: {}
+        }
+        { 
+          parentIoFolderReferenceId: "engineOutputFolder2"
+          childIoFolderReferenceId: "owInputFolder2"
+          options: {}
+        }
+      ]
+    }){
+      id
+      targetId
 }}
 ```
 
