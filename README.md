@@ -68,6 +68,7 @@ mutation createCognitionJob {
       } 
       clusterId :"rt-1cdc1d6d-a500-467a-bc46-d3c5bf3d6901"
       tasks: [
+        {
           engineId: "8bdb0e3b-ff28-4f6e-a3ba-887bd06e6440"
           payload:{
             url: "LINK_TO_YOUR_FILE"
